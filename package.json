@@ -1,0 +1,22 @@
+{
+  "name": "petal-note-service",
+  "version": "0.0.1",
+  "description": "Petal Note Service",
+  "main": "handler.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/mutton-hot-pot/petal-note-service.git"
+  },
+  "author": "yinjiangsheng@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mutton-hot-pot/petal-note-service/issues"
+  },
+  "homepage": "https://github.com/mutton-hot-pot/petal-note-service#readme",
+  "dependencies": {
+    "graphql": "^0.12.3"
+  }
+}
