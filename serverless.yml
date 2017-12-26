@@ -11,37 +11,53 @@ service: petal-note-service
 provider:
   name: aws
   runtime: nodejs6.10
-  region: ap-northeast-1
+  region: ap-southeast-1
   stage: ${opt:stage, self:custom.defaultStage}
   profile: ${self:custom.profiles.${self:provider.stage}}
   environment:
-    NOTE_TABLE: note-${self:provider.stage}
+    NOTES_TABLE: notes-${self:provider.stage}
   iamRoleStatements:
     - Effect: Allow
       Action:
         - dynamodb:GetItem
         - dynamodb:UpdateItem
-      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.NOTE_TABLE}"
+      Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}"
 
 resources:
   Resources:
     NoteTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-          - AttributeName: title
-            AttributeType: S
-          - AttributeName: content
-            AttributeType: S
         KeySchema:
-          - AttributeName: id
+          - AttributeName: NoteId
             KeyType: HASH
+          - AttributeName: Title
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: NoteId
+            AttributeType: S
+          - AttributeName: Title
+            AttributeType: S
+          - AttributeName: Content
+            AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
-        TableName: ${self:provider.environment.NOTE_TABLE}
+        TableName: ${self:provider.environment.NOTES_TABLE}
+        GlobalSecondaryIndexes:
+          - IndexName: TitleContentIndex
+            KeySchema:
+              - AttributeName: Title
+                KeyType: HASH
+              - AttributeName: Content
+                KeyType: RANGE
+            Projection:
+              NonKeyAttributes:
+                - NoteId
+              ProjectionType: INCLUDE
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
 
 custom:
   defaultStage: dev
