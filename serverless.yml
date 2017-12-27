@@ -23,6 +23,15 @@ provider:
         - dynamodb:UpdateItem
       Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.NOTES_TABLE}"
 
+custom:
+  defaultStage: dev
+  profiles:
+    dev: devProfile
+    prod: prodProfile
+
+plugins:
+  - serverless-webpack
+
 resources:
   Resources:
     NoteTable:
@@ -59,19 +68,11 @@ resources:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
 
-custom:
-  defaultStage: dev
-  profiles:
-    dev: devProfile
-    prod: prodProfile
-
-# The `functions` block defines what code to deploy
 functions:
-  helloWorld:
-    handler: handler.query
-    # The `events` block defines how to trigger the handler.helloWorld code
+  graphql:
+    handler: handler.graphql
     events:
       - http:
-          path: query
-          method: get
+          path: graphql
+          method: post
           cors: true
