@@ -63,19 +63,19 @@ const createNote = (title, content) =>
     const params = {
       TableName: process.env.NOTES_TABLE,
       Item: {
-        NoteId: { S: uuidv4() },
-        Title: { S: title },
-        Content: { S: content }
+        noteId: { S: uuidv4() },
+        title: { S: title },
+        content: { S: content }
       }
     }
-    return dynamoDb.update(params, callback).then(result => result.Item)
+    return dynamoDb.put(params, callback).then(result => result.Item)
   })
 
 const retrieveNote = noteId =>
   promisify(callback => {
     const params = {
       TableName: process.env.NOTES_TABLE,
-      Key: { NoteId: { S: noteId } }
+      Key: { noteId: { S: noteId } }
     }
     return dynamoDb.get(params, callback).then(result => {
       return result.Item

@@ -34,20 +34,20 @@ plugins:
 
 resources:
   Resources:
-    NoteTable:
+    NotesTable:
       Type: 'AWS::DynamoDB::Table'
       Properties:
         KeySchema:
-          - AttributeName: NoteId
+          - AttributeName: noteId
             KeyType: HASH
-          - AttributeName: Title
+          - AttributeName: title
             KeyType: RANGE
         AttributeDefinitions:
-          - AttributeName: NoteId
+          - AttributeName: noteId
             AttributeType: S
-          - AttributeName: Title
+          - AttributeName: title
             AttributeType: S
-          - AttributeName: Content
+          - AttributeName: content
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
@@ -56,13 +56,13 @@ resources:
         GlobalSecondaryIndexes:
           - IndexName: TitleContentIndex
             KeySchema:
-              - AttributeName: Title
+              - AttributeName: title
                 KeyType: HASH
-              - AttributeName: Content
+              - AttributeName: content
                 KeyType: RANGE
             Projection:
               NonKeyAttributes:
-                - NoteId
+                - noteId
               ProjectionType: INCLUDE
             ProvisionedThroughput:
               ReadCapacityUnits: 1
